@@ -2,14 +2,7 @@ import pickle
 import heapq
 
 class RawSample:
-    def __init__(self, request_ts=-1,
-                 start_ts=-1,
-                 end_ts=-1,
-                 node_num=-1,
-                 requested_sec=-1,
-                 queue_name=None,
-                 id=0):
-
+    def __init__(self, request_ts=-1, start_ts=-1, end_ts=-1, node_num=-1, requested_sec=-1, queue_name=None, id=0):
         self.request_ts = request_ts
         self.start_ts = start_ts
         self.end_ts = end_ts
@@ -20,6 +13,7 @@ class RawSample:
         self.actual_runtime = self.end_ts - self.start_ts
         self.queue_job_list = []
         self.run_job_list = []
+        self.queue_job_list_itself = []
         self.id = id
 
     def __lt__(self, other):
@@ -41,7 +35,7 @@ class Preprocessor:
         """
         save_list = []
         for i in raw_sample_list:
-            tmp_list = [i.request_ts, i.start_ts, i.end_ts, i.node_num, i.requested_sec, i.queue_name, i.actual_sec, i.actual_runtime, i.queue_job_list, i.run_job_list, i.id]
+            tmp_list = [i.request_ts, i.start_ts, i.end_ts, i.node_num, i.requested_sec, i.queue_name, i.actual_sec, i.actual_runtime, i.queue_job_list, i.run_job_list, i.queue_job_list_itself, i.id]
             save_list.append(tmp_list)
         with open(file_path, 'wb') as text:
             pickle.dump(save_list, text)
@@ -67,7 +61,8 @@ class Preprocessor:
             tmp_rawsample.actual_runtime = i[7]
             tmp_rawsample.queue_job_list = i[8]
             tmp_rawsample.run_job_list = i[9]
-            tmp_rawsample.id = i[10]
+            tmp_rawsample.queue_job_list_itself = i[10]
+            tmp_rawsample.id = i[11]
             raw_list.append(tmp_rawsample)
 
         return raw_list
@@ -104,6 +99,8 @@ class Preprocessor:
                             if job.start_ts < i.request_ts:
                                 i.run_job_list.append(job.id)
                             if job.start_ts >= i.request_ts:
+                                if i.queue_name == job.queue_name:
+                                    i.queue_job_list_itself.append(job.id)
                                 i.queue_job_list.append(job.id)
                         break
             if raw_sample_list.index(i) % 1000 == 0:
