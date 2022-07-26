@@ -12,7 +12,9 @@ pd.set_option('display.max_colwidth', 1000)
 
 dataset = 'mira'
 map = {}
-map['mira'] = {'prod-short': 48 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 72 * 3600, 'prod-1024-torus': 108 * 3600}
+map['mira'] = {'prod-short': 72 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 96 * 3600, 'prod-1024-torus': 108 * 3600
+               ,'backfill-1024-torus' : 250 * 3600}
+# map['mira'] = {}
 def statistics(data, count):
     """
     去除一些特殊的列
@@ -47,6 +49,8 @@ def statistics(data, count):
        if new_data[i].queue_name in map[dataset].keys():
            if new_data[i].actual_sec <= map[dataset][new_data[i].queue_name]:
                index.append(i)
+       else:
+           index.append(i)
 
     output_data = []
     for i in index:
