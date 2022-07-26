@@ -23,10 +23,22 @@ class Sample:
                  run_cpu_sec_class_2=-1, run_cpu_sec_class_3=-1, run_time_remain_class_1=-1, run_time_remain_class_2=-1,
                  run_time_remain_class_3=-1,
                  actual_sec=-1, actual_run_time=-1,
-                 queue_name=-1):
+                 queue_name=-1,
+                 queue_node_sum_itself=-1,
+                 queue_request_time_sum_itself=-1,
+                 queue_job_sum_itself=-1,
+                 queue_cpu_sec_sum_itself=-1,
+                 queue_time_sum_itself=-1,):
         self.node = node
         self.request_time = request_time
         self.cpu_sec = cpu_sec
+
+        self.queue_node_sum_itself = queue_node_sum_itself
+        self.queue_request_time_sum_itself = queue_request_time_sum_itself
+        self.queue_job_sum_itself = queue_job_sum_itself
+        self.queue_cpu_sec_sum_itself = queue_cpu_sec_sum_itself
+        self.queue_time_sum_itself = queue_time_sum_itself
+
 
         self.queue_node_sum = queue_node_sum
         self.queue_request_time_sum = queue_request_time_sum
@@ -94,7 +106,8 @@ def sample_save(sample_list, file_path):
                     i.run_request_time_class_3, i.run_cpu_sec_class_1,
                     i.run_cpu_sec_class_2, i.run_cpu_sec_class_3, i.run_time_remain_class_1, i.run_time_remain_class_2,
                     i.run_time_remain_class_3,
-                    i.actual_sec, i.actual_run_time, i.queue_name]
+                    i.actual_sec, i.actual_run_time, i.queue_name, i.queue_node_sum_itself, i.queue_request_time_sum_itself,
+                    i.queue_job_sum_itself, i.queue_cpu_sec_sum_itself, i.queue_time_sum_itself]
         save_list.append(tmp_list)
     with open(file_path, 'wb') as text:
         pickle.dump(save_list, text)
@@ -121,7 +134,9 @@ def sample_load(file_path):
                           run_node_class_3=x[27], run_request_time_class_1=x[28], run_request_time_class_2=x[29],
                           run_request_time_class_3=x[30], run_cpu_sec_class_1=x[31], run_cpu_sec_class_2=x[32],
                           run_cpu_sec_class_3=x[33], run_time_remain_class_1=x[34], run_time_remain_class_2=x[35],
-                          run_time_remain_class_3=x[36], actual_sec=x[37], actual_run_time=x[38], queue_name=x[39]
+                          run_time_remain_class_3=x[36], actual_sec=x[37], actual_run_time=x[38], queue_name=x[39],
+                          queue_node_sum_itself=x[40], queue_request_time_sum_itself=x[41], queue_job_sum_itself=x[42],
+                          queue_cpu_sec_sum_itself=x[43], queue_time_sum_itself=x[44]
                           ) for index, x in enumerate(tmp_list)]
     return sample_list
 
@@ -142,6 +157,25 @@ def to_sample_list(preprocessed_list):
         tmp_sample.node = i.node_num
         tmp_sample.request_time = i.requested_sec
         tmp_sample.cpu_sec = tmp_sample.node * tmp_sample.request_time
+
+        queue_node_sum_itself = 0
+        queue_request_time_sum_itself = 0
+        queue_job_sum_itself = 0
+        queue_cpu_sec_sum_itself = 0
+        queue_time_sum_itself = 0
+
+        for j in i.queue_job_list_itself:
+            queue_node_sum_itself = queue_node_sum_itself + preprocessed_list[j].node_num
+            queue_request_time_sum_itself = queue_request_time_sum_itself + preprocessed_list[j].requested_sec
+            queue_job_sum_itself = queue_job_sum_itself + 1
+            queue_cpu_sec_sum_itself = queue_cpu_sec_sum_itself + preprocessed_list[j].node_num * preprocessed_list[j].requested_sec
+            queue_time_sum_itself = queue_time_sum_itself + i.request_ts - preprocessed_list[j].request_ts
+
+        tmp_sample.queue_node_sum_itself = queue_node_sum_itself
+        tmp_sample.queue_request_time_sum_itself = queue_request_time_sum_itself
+        tmp_sample.queue_job_sum_itself = queue_job_sum_itself
+        tmp_sample.queue_cpu_sec_sum_itself = queue_cpu_sec_sum_itself
+        tmp_sample.queue_time_sum_itself = queue_time_sum_itself
 
         queue_node_sum = 0
         queue_request_time_sum = 0

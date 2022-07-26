@@ -13,13 +13,14 @@ plt.style.use('fivethirtyeight')
 process = PreprocessorMira()
 raw_data = process.load('data/local/theta/RawSample_saved.txt')
 
+
 sample_data = to_sample_list(raw_data)
 sample_save(sample_data, 'data/local/theta/Sample_data.txt')
 sample_data = sample_load('data/local/theta/Sample_data.txt')
-
-count = 400
+#
+# count = 400
 new_data = data_process.statistics(sample_data, 400)
 data_process.save(new_data, 'data/local/theta/RawSample.csv')
-csv_data = pd.read_csv('data/local/theta/RawSample.csv')
-data_process.visualization(csv_data)
+# csv_data = pd.read_csv('data/local/theta/RawSample.csv')
+# data_process.visualization(csv_data)
 

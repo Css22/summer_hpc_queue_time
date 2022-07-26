@@ -103,7 +103,8 @@ def save(data, path):
                     i.queue_cpu_sec_class_3, i.queue_time_1, i.queue_time_2, i.queue_time_3, i.run_node_sum, i.run_request_time_sum,
                     i.run_job_sum, i.run_cpu_sec_sum, i.run_time_remain, i.run_node_class_1, i.run_node_class_2, i.run_node_class_3, i.run_request_time_class_1,
                     i.run_request_time_class_2, i.run_request_time_class_3, i.run_cpu_sec_class_1, i.run_cpu_sec_class_2, i.run_cpu_sec_class_3, i.run_time_remain_class_1,
-                    i.run_time_remain_class_2, i.run_time_remain_class_3, i.actual_sec, i.actual_run_time, i.queue_name]
+                    i.run_time_remain_class_2, i.run_time_remain_class_3, i.actual_sec, i.actual_run_time, i.queue_name, i.queue_node_sum_itself, i.queue_request_time_sum_itself,
+                    i.queue_job_sum_itself, i.queue_cpu_sec_sum_itself, i.queue_time_sum_itself]
         data_list.append(tmp_list)
 
     name = ['node', 'request_time', 'cpu_sec', 'queue_node_sum', 'queue_request_time_sum', 'queue_job_sum', 'queue_cpu_sec_sum', 'queue_time_sum',
@@ -111,7 +112,7 @@ def save(data, path):
             'queue_cpu_sec_class_1', 'queue_cpu_sec_class_2', 'queue_cpu_sec_class_3', 'queue_time_1', 'queue_time_2', 'queue_time_3', 'run_node_sum', 'run_request_time_sum',
             'run_job_sum', 'run_cpu_sec_sum', 'run_time_remain', 'run_node_class_1', 'run_node_class_2', 'run_node_class_3', 'run_request_time_class_1', 'run_request_time_class_2',
             'run_request_time_class_3', 'run_cpu_sec_class_1', 'run_cpu_sec_class_2', 'run_cpu_sec_class_3', 'run_time_remain_class_1', 'run_time_remain_class_2', 'run_time_remain_class_3',
-            'actual_sec', 'actual_run_time', 'queue_name']
+            'actual_sec', 'actual_run_time', 'queue_name', 'queue_node_sum_itself', 'queue_request_time_sum_itself', 'queue_job_sum_itself', 'queue_cpu_sec_sum_itself', 'queue_time_sum_itself']
     data_csv = pd.DataFrame(columns=name, data=data_list)
     data_csv.to_csv(path)
 
