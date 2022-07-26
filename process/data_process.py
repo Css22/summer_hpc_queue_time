@@ -1,6 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 plt.style.use('fivethirtyeight')
 # TODO
 pd.set_option('display.max_columns', 1000)
@@ -80,14 +81,24 @@ def normalization(data):
         对所有数据的某些列进行归一化
         :param data:所有数据
     """
-    pass
+    scaler = StandardScaler()
+    data_z_nomalization = data.copy()
+    for index, row in data_z_nomalization.iteritems():
+        if index == 'queue_name':
+            continue
+        row = scaler.fit_transform(row)
+    return data_z_nomalization
+
+
+
 
 def create_feature(data):
     """
         创建特征，比如在原来基础上创建特征，比如虚拟变量的特征创建
         :param data : dataframe类型的数据
     """
-    pass
+    data_dummies = pd.get_dummies(data, prefix_sep='_', columns=['queue_name'])
+    return data_dummies
 
 def save(data, path):
     """
