@@ -86,11 +86,9 @@ def normalization(data):
     for index, row in data_z_nomalization.iteritems():
         if index == 'queue_name':
             continue
-        row = scaler.fit_transform(row)
+        if index == 'actual_sec':
+        data_z_nomalization[index] = scaler.fit_transform(data_z_nomalization[[index]])
     return data_z_nomalization
-
-
-
 
 def create_feature(data):
     """
