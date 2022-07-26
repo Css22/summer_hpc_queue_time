@@ -9,6 +9,10 @@ pd.set_option('display.max_rows', 1000)
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_colwidth', 1000)
 
+
+dataset = 'mira'
+map = {}
+map['mira'] = {'prod-short': 48 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 72 * 3600, 'prod-1024-torus': 108 * 3600}
 def statistics(data, count):
     """
     去除一些特殊的列
@@ -37,7 +41,17 @@ def statistics(data, count):
     new_data = []
     for i in index:
         new_data.append(data[i])
-    return new_data
+
+    index = []
+    for i in range(0, len(new_data)):
+       if new_data[i].queue_name in map[dataset].keys():
+           if new_data[i].actual_sec <= map[dataset][new_data[i].queue_name]:
+               index.append(i)
+
+    output_data = []
+    for i in index:
+        output_data.append(new_data[i])
+    return output_data
 
 
 
@@ -46,7 +60,6 @@ def visualization(data):
     """
            可视化数据等待时间的分布，会针对每一条队列以及总的数据各输出分布图
            :param data:所有数据（list）
-           :param count: 阈值，低于这个数量的Job会被删除
     """
     print('----------------------------------------------')
     print(data['queue_name'].value_counts().head(20))
@@ -65,15 +78,6 @@ def visualization(data):
         plt.show()
     print('----------------------------------------------')
 
-# TODO
-def outlier(data, queue_name, percentage):
-    """
-        去除数据中的离群值
-        :param data:所有数据
-        :param queue_name: 处理的是哪条队列
-        :param percentage: 截尾的百分百比
-    """
-    pass
 
 # TODO
 def normalization(data):
@@ -87,6 +91,7 @@ def normalization(data):
         if index == 'queue_name':
             continue
         if index == 'actual_sec':
+            continue
         data_z_nomalization[index] = scaler.fit_transform(data_z_nomalization[[index]])
     return data_z_nomalization
 
