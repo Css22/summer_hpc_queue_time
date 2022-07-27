@@ -13,7 +13,7 @@ pd.set_option('display.max_colwidth', 1000)
 dataset = 'mira'
 map = {}
 map['mira'] = {'prod-short': 72 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 96 * 3600, 'prod-1024-torus': 108 * 3600
-               ,'backfill-1024-torus' : 250 * 3600}
+               ,'backfill-1024-torus': 250 * 3600}
 # map['mira'] = {}
 def statistics(data, count):
     """
