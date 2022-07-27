@@ -15,36 +15,40 @@ class DecisionTreeRegressor():
 
 
     def train(self):
-        X=self.data.drop('actual_sec', axis =1)
-        Y=self.data['actual_sec']
-        X_train, X_test, Y_train, Y_test = train_test_split(
-            X,Y,
-            train_size=0.8, test_size=0.2,
-            shuffle= False
-        )
 
-        # index = len(self.X)/10 * 8
-        # X_train = list()
-        # X_test = list()
-        # Y_train = list()
-        # Y_test = list()
-        # for i in range(0, len(self.X)):
-        #     if i < index:
-        #         X_train.append(self.X[i])
-        #         Y_train.append(self.Y[i])
-        #     else:
-        #         X_test.append(self.X[i])
-        #         Y_test.append(self.Y[i])
+        X= self.drop()
+        Y= self.data['actual_sec']
+
+        # X_train, X_test, Y_train, Y_test = train_test_split(
+        #     X,Y,
+        #     train_size=0.8, test_size=0.2,
+        #     shuffle= False
+        # )
+
+        X = np.array(X).tolist()
+        Y = np.array(Y).tolist()
+        index = len(X)/10 * 8
+        X_train = list()
+        X_test = list()
+        Y_train = list()
+        Y_test = list()
+        for i in range(0, len(X)):
+            if i < index:
+                X_train.append(X[i])
+                Y_train.append(Y[i])
+            else:
+                X_test.append(X[i])
+                Y_test.append(Y[i])
+
         tree_model = tree.DecisionTreeRegressor()
         X_train = np.array(X_train)
         Y_train = np.array(Y_train)
 
-        tree_model.max_depth = 100
         Y_train = Y_train.reshape(-1, 1)
         tree_model.fit(X_train, Y_train)
 
         self.model = tree_model
-        # self.test(self.model.predict(X_test), Y_test)
+        self.test(self.model.predict(X_test), Y_test)
 
     def test(self, Y_result, Y_test):
         sums = [0 for _ in range(6)]
@@ -58,7 +62,7 @@ class DecisionTreeRegressor():
         for i in range(0, len(Y_test)):
             predict_time = Y_result[i]
             actual_time = Y_test[i]
-            print(predict_time,actual_time)
+            print(predict_time, actual_time)
             if actual_time <= 1:  # 0-1
                 sums[0] += abs(predict_time - actual_time)
                 nums[0] += 1
@@ -98,7 +102,11 @@ class DecisionTreeRegressor():
         print(AAE)
         return AAE
 
-
-
+    def drop(self):
+        X = self.data.drop(labels=['actual_sec', 'queue_node_class_1', 'queue_node_class_2', 'queue_node_class_3', 'queue_request_time_class_1', 'queue_request_time_class_2'
+                                   , 'queue_request_time_class_3', 'queue_cpu_sec_class_1', 'queue_cpu_sec_class_2', 'queue_cpu_sec_class_3', 'queue_time_1', 'queue_time_2', 'queue_time_3',
+                                   'run_node_class_1', 'run_node_class_2', 'run_node_class_3', 'run_request_time_class_1', 'run_request_time_class_2', 'run_request_time_class_3', 'run_cpu_sec_class_1',
+                                   'run_cpu_sec_class_2', 'run_cpu_sec_class_3', 'run_time_remain_class_1', 'run_time_remain_class_2', 'run_time_remain_class_3'], axis=1)
+        return X
 
 
