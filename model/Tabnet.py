@@ -33,22 +33,21 @@ class TabNet():
         clf.fit(X_train=X_train, y_train=y_train, eval_set=[(X_valid, y_valid)])
 
         self.model = clf
-        self.test(X_test, Y_test)
+        self.test(self.model.predict(X_test), Y_test)
 
-    def test(self, X_test, Y_test):
+    def test(self, Y_result, Y_test):
         sums = [0 for _ in range(6)]
         nums = [0 for _ in range(6)]
-        count = [0 for _ in range(6)]
         sample_predict = []
         sample_actual = []
         for i in range(0, 6):
             sample_predict.append(list())
             sample_actual.append(list())
 
-        for i in X_test:
-            predict_time = max(0, self.predict(i))
-            predict_time = 2 ** predict_time - 1
-            actual_time = i.actual_sec
+        for i in range(0, len(Y_test)):
+            predict_time = Y_result[i]
+            actual_time = Y_test[i]
+            # print(predict_time, actual_time)
             if actual_time <= 1:  # 0-1
                 sums[0] += abs(predict_time - actual_time)
                 nums[0] += 1
@@ -79,11 +78,8 @@ class TabNet():
                 nums[5] += 1
                 sample_predict[5].append(int(predict_time))
                 sample_actual[5].append(actual_time)
-        # a = Draw()
-        # a.draw_line(sample_predict[0], sample_actual[0], str(0))
-        # a.draw_line(sample_predict[1], sample_actual[1], str(1))
-        for i in range(0, 6):
-            print(count[i], nums[i])
+
+        print(nums)
         avgs = [np.round(sums[i] / nums[i], 2) for i in range(6)]
         print(avgs)
         AAE = np.round(sum(sums) / sum(nums), 2)
@@ -92,10 +88,17 @@ class TabNet():
         return AAE
 
 
-    def predict(self,X):
-        result = self.model.predict(X)
-        return result[0]
-
+    def drop(self):
+        X = self.data.drop(labels=['actual_sec', 'queue_node_class_1', 'queue_node_class_2', 'queue_node_class_3',
+                                   'queue_request_time_class_1', 'queue_request_time_class_2'
+            , 'queue_request_time_class_3', 'queue_cpu_sec_class_1', 'queue_cpu_sec_class_2', 'queue_cpu_sec_class_3',
+                                   'queue_time_1', 'queue_time_2', 'queue_time_3',
+                                   'run_node_class_1', 'run_node_class_2', 'run_node_class_3',
+                                   'run_request_time_class_1', 'run_request_time_class_2', 'run_request_time_class_3',
+                                   'run_cpu_sec_class_1',
+                                   'run_cpu_sec_class_2', 'run_cpu_sec_class_3', 'run_time_remain_class_1',
+                                   'run_time_remain_class_2', 'run_time_remain_class_3'], axis=1)
+        return X
 
 
 

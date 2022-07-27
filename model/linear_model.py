@@ -1,8 +1,9 @@
 import numpy as np
 from pytorch_tabnet.tab_model import TabNetClassifier, TabNetRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn import tree
-class DecisionTreeRegressor():
+class Linear():
     def __init__(self, data):
         self.data = data
         self.model = None
@@ -10,35 +11,33 @@ class DecisionTreeRegressor():
 
     def train(self):
 
-        X = self.drop()
-        Y = self.data['actual_sec']
+        X= self.drop()
+        Y= self.data['actual_sec']
 
-        X_train, X_test, Y_train, Y_test = train_test_split(
-            X,Y,
-            train_size=0.8, test_size=0.2,
-            shuffle= False
-        )
-        #
-        # X = np.array(X).tolist()
-        # Y = np.array(Y).tolist()
-        # index = len(X)/10 * 8
-        # X_train = list()
-        # X_test = list()
-        # Y_train = list()
-        # Y_test = list()
-        # for i in range(0, len(X)):
-        #     if i < index:
-        #         X_train.append(X[i])
-        #         Y_train.append(Y[i])
-        #     else:
-        #         X_test.append(X[i])
-        #         Y_test.append(Y[i])
+        # X_train, X_test, Y_train, Y_test = train_test_split(
+        #     X,Y,
+        #     train_size=0.8, test_size=0.2,
+        #     shuffle= False
+        # )
 
-        tree_model = tree.DecisionTreeRegressor()
-        tree_model.fit(X_train, Y_train)
-        tree_model.min_samples_leaf = 5
-        tree_model.max_depth = 3
-        self.model = tree_model
+        X = np.array(X).tolist()
+        Y = np.array(Y).tolist()
+        index = len(X)/10 * 8
+        X_train = list()
+        X_test = list()
+        Y_train = list()
+        Y_test = list()
+        for i in range(0, len(X)):
+            if i < index:
+                X_train.append(X[i])
+                Y_train.append(Y[i])
+            else:
+                X_test.append(X[i])
+                Y_test.append(Y[i])
+
+        clt = LinearRegression()
+        clt.fit(X_train, Y_train)
+        self.model = clt
         self.test(self.model.predict(X_test), Y_test)
 
     def test(self, Y_result, Y_test):
@@ -85,9 +84,9 @@ class DecisionTreeRegressor():
                 sample_predict[5].append(int(predict_time))
                 sample_actual[5].append(actual_time)
 
-        # print(nums)
-        # avgs = [np.round(sums[i] / nums[i], 2) for i in range(6)]
-        # print(avgs)
+        print(nums)
+        avgs = [np.round(sums[i] / nums[i], 2) for i in range(6)]
+        print(avgs)
         AAE = np.round(sum(sums) / sum(nums), 2)
         print('AAE :', end=' ')
         print(AAE)

@@ -68,8 +68,7 @@ def visualization(data):
     print('----------------------------------------------')
     print(data['queue_name'].value_counts().head(20))
     queue_name_list = data['queue_name'].values.tolist()
-    # data['actual_sec'] = data['actual_sec'].apply(lambda x: x/3600)
-    # data['actual_sec'] = data['actual_sec'].apply(lambda x: math.log2(x))
+    data['actual_sec'] = data['actual_sec'].apply(lambda x: x/3600)
     queue_name_list = list(dict.fromkeys(queue_name_list))
 
     data['actual_sec'].hist()

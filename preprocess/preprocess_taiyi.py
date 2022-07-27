@@ -52,3 +52,13 @@ class PreprocessorTaiyi(Preprocessor):
                         op_line.extend(tmp_arr)
         return raw_samples
 
+    def fix(self, raw_data):
+        index = []
+        for i in range(0, len(raw_data)):
+            if raw_data[i].start_ts != 0:
+                index.append(i)
+
+        new_data = []
+        for i in index:
+            new_data.append(raw_data[i])
+        return  new_data

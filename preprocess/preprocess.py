@@ -33,6 +33,7 @@ class Preprocessor:
         :param raw_sample_list: 待保存的RawSample数组
         :param file_path: 保存的位置
         """
+        print(raw_sample_list[0])
         save_list = []
         for i in raw_sample_list:
             tmp_list = [i.request_ts, i.start_ts, i.end_ts, i.node_num, i.requested_sec, i.queue_name, i.actual_sec, i.actual_runtime, i.queue_job_list, i.run_job_list, i.queue_job_list_itself, i.id]
