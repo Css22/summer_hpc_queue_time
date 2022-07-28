@@ -33,7 +33,6 @@ class Preprocessor:
         :param raw_sample_list: 待保存的RawSample数组
         :param file_path: 保存的位置
         """
-        print(raw_sample_list[0])
         save_list = []
         for i in raw_sample_list:
             tmp_list = [i.request_ts, i.start_ts, i.end_ts, i.node_num, i.requested_sec, i.queue_name, i.actual_sec, i.actual_runtime, i.queue_job_list, i.run_job_list, i.queue_job_list_itself, i.id]
@@ -84,8 +83,9 @@ class Preprocessor:
 
         raw_sample_list.sort(key=lambda x: x.request_ts)
         request_ts_list = []
-
+        t = 0
         for i in raw_sample_list:
+            t = t + 1
             if len(request_ts_list) == 0:
                 i.run_job_list = []
                 i.queue_job_list = []
@@ -104,7 +104,7 @@ class Preprocessor:
                                     i.queue_job_list_itself.append(job.id)
                                 i.queue_job_list.append(job.id)
                         break
-            if raw_sample_list.index(i) % 1000 == 0:
-                print(raw_sample_list.index(i), len(raw_sample_list))
+            if t % 1000 == 0:
+                print(t, len(raw_sample_list))
             heapq.heappush(request_ts_list, i)
         return raw_sample_list

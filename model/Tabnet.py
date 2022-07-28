@@ -4,11 +4,14 @@ from sklearn.model_selection import train_test_split
 
 class TabNet():
     def __init__(self, data):
-        data_array = np.array(data.drop('actual_sec', 1))
+        self.data = data
+        data_array = np.array(self.data['actual_sec'])
+        self.Y = data_array.tolist()
+
+        self.drop()
+        data_array = np.array(self.data)
         self.X = data_array.tolist()
 
-        data_array = np.array(data['actual_sec'])
-        self.Y = data_array.tolist()
 
         self.model = None
 
@@ -27,13 +30,14 @@ class TabNet():
         y_train = np.array(Y_train)
         X_valid = np.array(X_valid)
         y_valid = np.array(Y_valid)
+
         clf = TabNetRegressor()
         y_train = y_train.reshape(-1, 1)
         y_valid = y_valid.reshape(-1, 1)
         clf.fit(X_train=X_train, y_train=y_train, eval_set=[(X_valid, y_valid)])
 
         self.model = clf
-        self.test(self.model.predict(X_test), Y_test)
+        self.test(self.model.predict(np.array(X_test)), Y_test)
 
     def test(self, Y_result, Y_test):
         sums = [0 for _ in range(6)]
@@ -47,7 +51,6 @@ class TabNet():
         for i in range(0, len(Y_test)):
             predict_time = Y_result[i]
             actual_time = Y_test[i]
-            # print(predict_time, actual_time)
             if actual_time <= 1:  # 0-1
                 sums[0] += abs(predict_time - actual_time)
                 nums[0] += 1

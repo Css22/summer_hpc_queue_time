@@ -20,15 +20,15 @@ plt.style.use('fivethirtyeight')
 
 # sample_data = to_sample_list(raw_data)
 # sample_save(sample_data, 'data/local/theta/Sample_data.txt')
-sample_data = sample_load('data/local/mira/Sample_data.txt')
+sample_data = sample_load('data/local/Taiyi/Sample_data.txt')
 # count = 400
-new_data = data_process.statistics(sample_data, 400)
-data_process.save(new_data, 'data/local/mira/RawSample.csv')
-csv_data = pd.read_csv('data/local/mira/RawSample.csv')
+new_data = data_process.statistics(sample_data, 1000)
+data_process.save(new_data, 'data/local/Taiyi/RawSample.csv')
+csv_data = pd.read_csv('data/local/Taiyi/RawSample.csv')
 
 data_process.visualization(csv_data)
 csv_data = data_process.normalization(csv_data)
 csv_data = data_process.create_feature(csv_data)
 
-model = DecisionTreeRegressor(csv_data)
+model = TabNet(csv_data)
 model.train()

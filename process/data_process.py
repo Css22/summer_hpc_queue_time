@@ -10,11 +10,13 @@ pd.set_option('display.width', 1000)
 pd.set_option('display.max_colwidth', 1000)
 
 
-dataset = 'mira'
+dataset = 'taiyi'
 map = {}
 # map['mira'] = {'prod-short': 72 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 96 * 3600, 'prod-1024-torus': 108 * 3600
 #                ,'backfill-1024-torus': 250 * 3600}
 map['mira'] = {}
+map['taiyi'] = {'large': 50, 'gpu':48, 'ser':48, 'debug': 48, 'short': 48, 'spec': 48, 'medium': 48}
+
 def statistics(data, count):
     """
     去除一些特殊的列
