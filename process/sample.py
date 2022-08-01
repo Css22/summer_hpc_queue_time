@@ -150,8 +150,9 @@ def to_sample_list(preprocessed_list):
     """
 
     sample_list = []
-
+    index = 0
     for i in preprocessed_list:
+        index = index + 1
         tmp_sample = Sample()
         tmp_sample.queue_name = i.queue_name
         tmp_sample.node = i.node_num
@@ -245,5 +246,6 @@ def to_sample_list(preprocessed_list):
         tmp_sample.actual_sec = actual_sec
         tmp_sample.actual_run_time = actual_run_time
         sample_list.append(tmp_sample)
-
+        if index % 1000 == 0 :
+            print(index, len(preprocessed_list))
     return sample_list

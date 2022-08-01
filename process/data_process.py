@@ -1,4 +1,5 @@
 import math
+import gc
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -12,11 +13,11 @@ pd.set_option('display.max_colwidth', 1000)
 
 dataset = 'taiyi'
 map = {}
-# map['mira'] = {'prod-short': 72 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 96 * 3600, 'prod-1024-torus': 108 * 3600
-#                ,'backfill-1024-torus': 250 * 3600}
+map['mira'] = {'prod-short': 72 * 3600, 'prod-long': 300 * 3600, 'prod-capability': 300 * 3600, 'R.pm': 3 * 3600, 'backfill': 96 * 3600, 'prod-1024-torus': 108 * 3600
+               ,'backfill-1024-torus': 250 * 3600}
 map['mira'] = {}
-map['taiyi'] = {'large': 50, 'gpu':48, 'ser':48, 'debug': 48, 'short': 48, 'spec': 48, 'medium': 48}
-
+map['taiyi'] = {'large': 48 * 3600, 'gpu': 48 * 3600, 'ser': 48 * 3600, 'debug': 48 * 3600, 'short': 48 * 3600, 'spec': 48 * 3600, 'medium': 48 * 3600}
+# map['taiyi'] = {}
 def statistics(data, count):
     """
     去除一些特殊的列
@@ -133,6 +134,17 @@ def save(data, path):
             'run_job_sum', 'run_cpu_sec_sum', 'run_time_remain', 'run_node_class_1', 'run_node_class_2', 'run_node_class_3', 'run_request_time_class_1', 'run_request_time_class_2',
             'run_request_time_class_3', 'run_cpu_sec_class_1', 'run_cpu_sec_class_2', 'run_cpu_sec_class_3', 'run_time_remain_class_1', 'run_time_remain_class_2', 'run_time_remain_class_3',
             'actual_sec', 'actual_run_time', 'queue_name', 'queue_node_sum_itself', 'queue_request_time_sum_itself', 'queue_job_sum_itself', 'queue_cpu_sec_sum_itself', 'queue_time_sum_itself']
+    data_csv = pd.DataFrame(columns=name, data=data_list)
+    data_csv.to_csv(path)
+
+def seq_save(data,path):
+    data_list = list()
+    for i in data:
+        tmp_list = [i.node, i.request_time, i.cpu_sec, i.queue_name, i.actual_sec, i.itself_queue_list, i.queue_list, i.run_list]
+        data_list.append(tmp_list)
+    del data
+    gc.collect()
+    name = ['node', 'request_time', 'cpu_sec', 'queue_name', 'actual_sec','itself_queue_list', 'queue_list', 'run_list']
     data_csv = pd.DataFrame(columns=name, data=data_list)
     data_csv.to_csv(path)
 

@@ -21,7 +21,7 @@ class DecisionTreeRegressor():
 
         X = np.array(X).tolist()
         Y = np.array(Y).tolist()
-        index = len(X)/10 * 8
+        index = len(X)/10 * 7
         X_train = list()
         X_test = list()
         Y_train = list()

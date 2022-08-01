@@ -77,7 +77,9 @@ class PreprocessorTaiyi(Preprocessor):
                     if len(op_line) >= 1 and op_line[0] == '"JOB_FINISH"':
                         op_line.extend(tmp_arr)
         raw_samples.sort(key=lambda x: x.request_ts)
+        f.close()
         return raw_samples
+
     def fix(self, raw_data):
         index = []
         for i in range(0, len(raw_data)):

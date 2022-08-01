@@ -19,12 +19,14 @@ class TabNet():
     def train(self):
         X, X_test, Y, Y_test = train_test_split(
             self.X, self.Y,
-            train_size=0.8, test_size=0.2
+            train_size=0.7, test_size=0.3,
+            shuffle=False
         )
 
         X_train, X_valid, Y_train, Y_valid = train_test_split(
             X, Y,
-            train_size=0.75, test_size=0.25
+            train_size=0.6, test_size=0.4,
+            shuffle=False
         )
         X_train = np.array(X_train)
         y_train = np.array(Y_train)
@@ -51,32 +53,38 @@ class TabNet():
         for i in range(0, len(Y_test)):
             predict_time = Y_result[i]
             actual_time = Y_test[i]
+            # print(predict_time, actual_time)
             if actual_time <= 1:  # 0-1
                 sums[0] += abs(predict_time - actual_time)
                 nums[0] += 1
                 sample_predict[0].append(int(predict_time))
                 sample_actual[0].append(actual_time)
             elif actual_time <= 3:  # 1-3
+                print(predict_time, actual_time)
                 sums[1] += abs(predict_time - actual_time)
                 nums[1] += 1
                 sample_predict[1].append(int(predict_time))
                 sample_actual[1].append(actual_time)
             elif actual_time <= 6:  # 3-6
+                print(predict_time, actual_time)
                 sums[2] += abs(predict_time - actual_time)
                 nums[2] += 1
                 sample_predict[2].append(int(predict_time))
                 sample_actual[2].append(actual_time)
             elif actual_time <= 12:  # 6-12
+                print(predict_time, actual_time)
                 sums[3] += abs(predict_time - actual_time)
                 nums[3] += 1
                 sample_predict[3].append(int(predict_time))
                 sample_actual[3].append(actual_time)
             elif actual_time <= 24:  # 12-24
+                print(predict_time, actual_time)
                 sums[4] += abs(predict_time - actual_time)
                 nums[4] += 1
                 sample_predict[4].append(int(predict_time))
                 sample_actual[4].append(actual_time)
             else:
+                print(predict_time, actual_time)
                 sums[5] += abs(predict_time - actual_time)
                 nums[5] += 1
                 sample_predict[5].append(int(predict_time))
